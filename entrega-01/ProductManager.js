@@ -25,6 +25,7 @@ class ProductManager {
     }
 
     this.products.push(product);
+    console.log(`Product ${product.title} added`)
   }
 
   getProductById(id) {
@@ -56,7 +57,7 @@ console.log("// Llamar a getProducts, debería devolver un array vacío")
 console.log(productManager.getProducts()); // []
 
 console.log("// Definir un nuevo producto")
-productManager.addProduct(new Product( "producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc123", 25));
+productManager.addProduct(new Product( "Producto prueba 0", "Este es un producto prueba", 200, "Sin imagen", "abc123", 25));
 // Variante 1
 productManager.addProduct(new Product( "Producto Prueba 1", "Este es el primer producto de prueba", 100, "Sin imagen", "def456", 30));
 // Variante 2
@@ -73,5 +74,5 @@ productManager.addProduct(new Product( "producto prueba", "Este es un producto p
 console.log("// Obtener un producto por id, debería devolver el producto si existe, de lo contrario registrar No encontrado")
 console.log("// Devuelve el producto por id")
 console.log(productManager.getProductById(1));
-console.log("// Registra No encontrado")
+console.log("// Registro no encontrado")
 console.log(productManager.getProductById(999));
