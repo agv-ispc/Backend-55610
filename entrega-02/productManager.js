@@ -13,12 +13,6 @@ class ProductManager {
       this.products = [];
     }
   }
-  /* validate(product) {
-    if (!product.userId || !product.id || !product.title || !product.body) {
-      return false;
-    }
-    return true;
-  } */
   // Método para agregar un nuevo producto.
   addProduct = async (title, description, price, thumbnail, code, stock) => {
     // Verificamos que todos los campos estén presentes.
@@ -36,7 +30,7 @@ class ProductManager {
       else {
         // Si todos los argumentos están presentes y el código del producto no está repetido, procedemos a crear el nuevo producto.
         // Generamos un nuevo ID para el producto.
-        const id = await this.generateId()
+        const id = await this.products.length > 0 ? this.products[this.products.length - 1].id + 1 : 1
         // Creamos el nuevo producto.
         const new_product = {
           id, title, description, price, thumbnail, code, stock
@@ -48,25 +42,16 @@ class ProductManager {
         await fs.promises.writeFile(this.path, JSON.stringify(this.products, null, 2))
       }
     }
-  }  
+  }
   // Método para obtener la lista de productos desde un archivo.
-  getProducts = async () => {
-    // Leemos el contenido del archivo y lo convertimos de una cadena en formato JSON a un objeto.
-    const product_list = await fs.promises.readFile(this.path, "utf-8")
-    const product_list_res = JSON.parse(product_list)
-    return product_list_res
-  }
-  // Método para generar un nuevo ID para un producto
-  generateId = async () => {
-    const counter = this.products.length
-    if (counter === 0) {
-      return 1
+  async getProducts() {
+    try {
+      return this.products
     }
-    else {
-      return (this.products[counter - 1].id) + 1
+    catch (error) {
+      console.log(error);
     }
   }
-
   // Método para actualizar un producto existente
   updateProduct = async (id, title, description, price, thumbnail, code, stock) => {
     // Verificamos que todos los campos estén presentes.
@@ -112,9 +97,8 @@ class ProductManager {
   }
   // Método para obtener un producto por su ID
   getProductbyId = async (id) => {
-    const all_products = await this.getProducts()
     // Buscamos el producto con el ID dado en la lista de productos.
-    const found = all_products.find(element => element.id === id)
+    const found = this.products.find(element => element.id === id)
     // Devolvemos el producto encontrado.
     return found
   }
@@ -147,13 +131,13 @@ async function testProductManager() {
   // Verificamos que el producto se haya actualizado correctamente
   const updatedProduct1 = await productManager.getProductbyId(1);
   console.log(updatedProduct1); // Debería mostrar el producto con ID 1 actualizado
-  
+
   console.log("Test de eliminacion de producto por ID")
   // Probamos el método deleteProduct
   await productManager.deleteProduct(2);
-  
+
   // Verificamos que el producto se haya eliminado correctamente
-  
+
   const deletedProduct1 = await productManager.getProductbyId(2);
   console.log(deletedProduct1); // Debería mostrar undefined o null, ya que el producto con ID 1 ya no existe
 }

@@ -1,12 +1,12 @@
 [
   {
     "id": 1,
-    "title": "Producto 1 actualizado",
-    "description": "Descripción 1 actualizada",
-    "price": 150,
-    "thumbnail": "url1actualizada",
-    "code": "codigo1actualizado",
-    "stock": 15
+    "title": "Producto 1",
+    "description": "Descripción 1",
+    "price": 100,
+    "thumbnail": "url1",
+    "code": "codigo1",
+    "stock": 10
   },
   {
     "id": 3,
