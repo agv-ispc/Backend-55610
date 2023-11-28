@@ -35,7 +35,7 @@ router.get("/:cid", async (req, res) => {
   let cart_id = parseInt(req.params.cid);
   console.log(cart_id)
   // Obtenemos el carrito por su ID.
-  let cart_by_id = await cartsManager.getProductbyId(cart_id);
+  let cart_by_id = await cartsManager.getCartbyId(cart_id);
 
   // Devolvemos el carrito.
   res.json(cart_by_id);
@@ -43,33 +43,35 @@ router.get("/:cid", async (req, res) => {
 
 router.put("/:cid/product/:pid", async (req, res) => {
   // Obtener los IDs del carrito y del producto de los parámetros de la ruta
-  const cid = req.params.cid;
-  const pid = req.params.pid;
-  console.log(req.params.cid)
-  console.log(req.params.pid)
-  console.log(req.body)
+  let cid = parseInt(req.params.cid);
+  let pid = parseInt(req.params.pid);
+
+  console.log("Route "+req.params.cid)
+  console.log("Route "+req.params.pid)
+  console.log("Route "+req.body)
   // Obtener la cantidad del cuerpo de la solicitud
-  const quantity = req.body.quantity;
+  let quantity = req.body.quantity;
 
   // Obtener el carrito actual
-  const cart = await cartsManager.getCartbyId(cid);
-  if (!cart) {
+  let cart_by_id = await cartsManager.getCartbyId(cid);
+  console.log("Route "+cart_by_id)
+  if (!cart_by_id) {
     res.status(404).send('El carrito no existe');
     return;
   }
 
   // Verificar si el producto ya está en el carrito
-  const productInCart = cart.products.find(product => product.id === pid);
+  const productInCart = cart_by_id.products.find(product => product.id == pid);
   if (productInCart) {
     // Si el producto ya está en el carrito, incrementar la cantidad
     productInCart.quantity += quantity;
   } else {
     // Si el producto no está en el carrito, agregarlo
-    cart.products.push({id: pid, quantity: quantity});
+    cart_by_id.products.push({id: pid, quantity: quantity});
   }
 
   // Actualizar el carrito
-  await cartsManager.updateCart(cid, cart.products);
+  await cartsManager.updateCart(cid, cart_by_id.products);
 
   res.send('El producto ha sido agregado al carrito');
 });
