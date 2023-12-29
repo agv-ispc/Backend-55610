@@ -1,6 +1,26 @@
-const socket = io();
+import { io } from 'https://cdn.socket.io/4.3.2/socket.io.esm.min.js'
+const socket = io()
 
 const form = document.querySelector("form")
+const productsList = document.getElementById("products-list");
+
+// Escuchar el evento "productList" desde el servidor
+socket.on('products list', (products) => {
+  console.log(products)
+
+  productsList.innerHTML = '';
+  // Obtener la lista de productos del DOM
+    products.forEach((product) => {
+      // Crear un elemento de lista y establecer su contenido
+      const listItem = document.createElement("li");
+      listItem.innerHTML = `${product.title} - Price: ${product.price}`;
+  
+      // Agregar el elemento de lista a la lista en el DOM
+      productsList.appendChild(listItem);
+    });  
+});
+
+
 // Manejador para la presentación del formulario (Agregar Producto)
 form.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -21,22 +41,5 @@ form.addEventListener("submit", (e) => {
   form.reset();
 });
 
-// Escuchar el evento "productList" desde el servidor
-socket.on("products-list", (products) => {
-  console.log(products)
-  // Obtener la lista de productos del DOM
-  const productsList = document.querySelector("#products-list");
 
-  // Limpiar la lista antes de actualizarla con nuevos productos
-  productsList.innerHTML = "";
 
-  // Iterar sobre la lista de productos recibidos del servidor
-  products.forEach((product) => {
-    // Crear un elemento de lista y establecer su contenido
-    const listItem = document.createElement("li");
-    listItem.textContent = `${product.title} - Price: ${product.price}`;
-
-    // Agregar el elemento de lista a la lista en el DOM
-    productsList.appendChild(listItem);
-  });
-});

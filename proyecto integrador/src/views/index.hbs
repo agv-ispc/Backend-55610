@@ -4,7 +4,7 @@
   </h1>
   <div>
     <h1>Agregar Producto</h1>
-    <form>
+    <form id="form">
       <label for="title">Título:</label><br>
       <input type="text" id="title" name="title"><br>
       <label for="description">Descripción:</label><br>
@@ -38,5 +38,5 @@
     {{/each}}
   </div>
   <script src="/socket.io/socket.io.js"></script>
-  <script src="/js/main.js"></script>
+  <script type="module" src="/js/main.js"></script>
 </div>
