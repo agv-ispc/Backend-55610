@@ -7,12 +7,10 @@ import handlebars from 'express-handlebars';
 import { Server } from 'socket.io';
 import Handlebars from 'handlebars';
 import { allowInsecurePrototypeAccess } from '@handlebars/allow-prototype-access';
-import dotenv from 'dotenv';
 import passport from 'passport';
-import authPassport from './auth/auth.js';
-import path from 'path';
-
-import { __dirname } from './dirname.js';
+import authPassport from './config/auth.js';
+import config from './config/env.config.js'
+import __dirname from './dirname.js';
 
 // Creamos una instancia de la aplicación Express
 const app = express();
@@ -25,6 +23,7 @@ app.engine('hbs', handlebars.engine({
   partialsDir: `${__dirname}/views`,
   handlebars: allowInsecurePrototypeAccess(Handlebars),
 }));
+
 app.set('views', `${__dirname}/views`);
 app.set('view engine', 'hbs');
 app.use(express.static(`${__dirname}/public`))
@@ -34,13 +33,8 @@ app.use((req, res) => {
   res.status(404).send("Error - pagina no encontrada");
 });
 
-dotenv.config();
-
-const cookiepass = process.env.COOKIEPASS;
-const user = process.env.DB_USER;
-const password = process.env.DB_PASSWORD;
-const cluster = process.env.DB_CLUSTER;
-const MongoUrl = `mongodb+srv://${user}:${password}@${cluster}`
+const cookiepass = config.COOKIEPASS;
+const MongoUrl = config.MONGO_URL
 
 mongoose.set('strictQuery', true);
 
@@ -67,7 +61,7 @@ app.use(passport.session());
 
 
 // Definimos el puerto en el que el servidor escuchará las solicitudes
-const PORT = process.env.PORT;
+const PORT = config.SERVER_PORT;
 
 // Iniciamos el servidor y escuchamos en el puerto especificado
 const httpServer = app.listen(PORT, () =>
