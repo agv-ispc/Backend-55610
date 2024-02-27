@@ -6,7 +6,7 @@ const cartSchema = new Schema({
   products: {
     type: Array,
     require: true,
-    id: {
+    _id: {
       type: Number,
       require: true
     },

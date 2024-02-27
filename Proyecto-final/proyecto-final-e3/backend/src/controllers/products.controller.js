@@ -24,10 +24,25 @@ export const addProduct = async (req, res) => {
   res.status(201).json(addedProduct)
 }
 
-export const getProducts = async (req, res) => {
+/* export const getProducts = async (req, res) => {
   const products = await ProductModel.find();
   res.json(products);
-}
+} */
+
+export const getProducts = async (req, res) => {
+  try {
+    const { page = 1, pagination = 20 } = req.query;
+
+    const products = await ProductModel.find()
+      .skip((page - 1) * pagination)
+      .limit(parseInt(pagination));
+
+    res.json(products);
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 
 export const getProductById = async (req, res) => {
   const product = await ProductModel.findById(req.params.prodid);
