@@ -25,7 +25,6 @@ server.use((req, res, next) => {
 });
 
 server.use("/api/auth", authRoutes);
-
 server.use('/api/products',productsRoutes);
 server.use('/api/carts',cartsRoutes);
 

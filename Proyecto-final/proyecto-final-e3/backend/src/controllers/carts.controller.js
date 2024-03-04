@@ -75,8 +75,9 @@ export const removeProductFromCart = async (req, res) => {
 export const addProductToCart = async (req, res) => {
   try {
     // Obtiene el carrito por su ID
+    console.log(req.query.cartid)
     let cart = await CartModel.findById(req.query.cartid);
-
+    console.log(cart)
     // Verifica si el carrito existe
     if (!cart) {
       // Si no se encuentra el carrito, crea uno nuevo
@@ -84,7 +85,8 @@ export const addProductToCart = async (req, res) => {
     }
 
     // Obtiene el ID del producto y la cantidad a agregar desde el cuerpo de la solicitud
-    const productIdToAdd = req.body.id;
+    const productIdToAdd = req.body.pid;
+    
     const quantityToAdd = req.body.quantity || 1; // Si no se proporciona la cantidad, se asume 1 por defecto
 
     // Verifica si el producto ya está en el carrito
