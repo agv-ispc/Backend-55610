@@ -1,18 +1,28 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
+import config from './env.db.js';
 
-export default class MongoSingleton {
+class MongoSingleton {
   static #instance;
-  
+
   constructor() {
-    this.#connectMongodb();
+    this.#connectMongoDB();
   }
 
-  #connectMongodb = async () => {
+  #connectMongoDB = async () => {
     try {
-      await mongoose.connect(config.monogoUrl);
-      console.log("Conectado a MongoDB.");
+      await mongoose.connect(config.MONGO_URL);
+      console.log('Connected to MongoDB.');
     } catch (error) {
-      
+      console.error('Error connecting to MongoDB:', error);
     }
+  };
+
+  static getInstance() {
+    if (!this.#instance) {
+      this.#instance = new MongoSingleton();
+    }
+    return this.#instance;
   }
 }
+
+export default MongoSingleton;

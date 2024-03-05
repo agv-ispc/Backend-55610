@@ -6,6 +6,7 @@ import { createRoles } from './controllers/roles.controller.js'
 import cartsRoutes from './routes/carts.routes.js'
 import productsRoutes from './routes/products.routes.js'
 import authRoutes from './routes/auth.routes.js'
+import mailRoutes from './routes/mail.routes.js'
 
 const server = express();
 createRoles();
@@ -27,5 +28,6 @@ server.use((req, res, next) => {
 server.use("/api/auth", authRoutes);
 server.use('/api/products',productsRoutes);
 server.use('/api/carts',cartsRoutes);
+server.use("/", mailRoutes)
 
 export default server;
