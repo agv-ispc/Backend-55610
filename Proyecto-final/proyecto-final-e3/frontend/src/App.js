@@ -9,7 +9,10 @@ import ProductsPage from './pages/ProductsPage';
 import CartPage from './pages/CartPage';
 import UserProfilePage from './pages/UserProfilePage';
 
+
 const App = () => {
+  
+  
   return (
     <Router>
       <div>
@@ -20,6 +23,7 @@ const App = () => {
           <Route path="/cart" component={CartPage} />
           <Route path="/profile" component={UserProfilePage} />
         </Switch>
+        <Products products={filteredProducts} />
         <Footer />
       </div>
     </Router>
