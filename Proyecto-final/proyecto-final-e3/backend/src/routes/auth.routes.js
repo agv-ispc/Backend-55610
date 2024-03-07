@@ -1,10 +1,20 @@
 import { Router } from 'express';
-const router = Router();
-import * as authController from '../controllers/auth.controller.js';
+import { register, login} from '../controllers/auth.controller.js';
 import { isAdmin, isAuthenticated } from '../middleware/auth.middleware.js'
+import { checkRole, checkUser } from '../middleware/user.middleware.js';
 
-router.post('/signup', authController.signup);
-router.post('/signin', authController.signin);
+const router = Router();
+
+router.use((req, res, next) => {
+  res.header(
+    "Access-Control-Allow-Headers",
+    "x-access-token, Origin, Content-Type, Accept"
+  );
+  next();
+});
+
+router.post('/register', [ checkUser, checkRole ], register);
+router.post('/login', login);
 
 router.post('/products', isAdmin, (req, res) => {
   // Solo los administradores pueden crear productos

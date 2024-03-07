@@ -31,7 +31,7 @@ export const addProduct = async (req, res) => {
 
 export const getProducts = async (req, res) => {
   try {
-    const { page = 1, pagination = 20 } = req.query;
+    const { page = 1, pagination = 20 } = req.body;
 
     const products = await ProductModel.find()
       .skip((page - 1) * pagination)
@@ -45,16 +45,16 @@ export const getProducts = async (req, res) => {
 };
 
 export const getProductById = async (req, res) => {
-  const product = await ProductModel.findById(req.params.prodid);
+  const product = await ProductModel.findById(req.body.prodid);
   res.status(200).json(product);
 }
 
 export const updateProduct = async (req, res) => {
-  const updatedProduct = await ProductModel.findByIdAndUpdate(req.params.prodid, req.body, { new: true });
+  const updatedProduct = await ProductModel.findByIdAndUpdate(req.body.prodid, req.body, { new: true });
   res.status(200).json(updatedProduct);
 }
 
 export const deleteProduct = async (req, res) => {
-  const deletedProduct = await ProductModel.findByIdAndDelete(req.params.prodid);
+  const deletedProduct = await ProductModel.findByIdAndDelete(req.body.prodid);
   res.status(200).json(`Product ${deletedProduct.title} - DELETED`);
 }

@@ -7,14 +7,14 @@ export const getCarts = async (req, res) => {
 }
 
 export const getCartById = async (req, res) => {
-  const cart = await CartModel.findById(req.query.cartid);
+  const cart = await CartModel.findById(req.body.cartid);
   res.status(200).json(cart);
 }
 
 export const getProductDetailsInCart = async (req, res) => {
   try {
     // Obtiene el carrito por su ID
-    const cart = await CartModel.findById(req.query.cartid);
+    const cart = await CartModel.findById(req.body.cartid);
 
     // Verifica si el carrito existe
     if (!cart) {
@@ -46,7 +46,7 @@ export const getProductDetailsInCart = async (req, res) => {
 export const removeProductFromCart = async (req, res) => {
   try {
     // Obtiene el carrito por su ID
-    const cart = await CartModel.findById(req.params.cartid);
+    const cart = await CartModel.findById(req.body.cartid);
 
     // Verifica si el carrito existe
     if (!cart) {
@@ -55,7 +55,7 @@ export const removeProductFromCart = async (req, res) => {
     }
 
     // Obtiene el ID del producto a eliminar
-    const productIdToRemove = req.params.productid;
+    const productIdToRemove = req.body.productid;
 
     // Filtra los productos en el carrito para excluir el producto a eliminar
     cart.products = cart.products.filter(productInCart => productInCart.id !== productIdToRemove);
@@ -75,13 +75,13 @@ export const removeProductFromCart = async (req, res) => {
 export const addProductToCart = async (req, res) => {
   try {
     // Obtiene el carrito por su ID
-    console.log(req.query.cartid)
-    let cart = await CartModel.findById(req.query.cartid);
+    console.log(req.body.cartid)
+    let cart = await CartModel.findById(req.body.cartid);
     console.log(cart)
     // Verifica si el carrito existe
     if (!cart) {
       // Si no se encuentra el carrito, crea uno nuevo
-      cart = new CartModel({ _id: req.query.cartid, products: [] });
+      cart = new CartModel({ _id: req.body.cartid, products: [] });
     }
 
     // Obtiene el ID del producto y la cantidad a agregar desde el cuerpo de la solicitud
@@ -112,23 +112,10 @@ export const addProductToCart = async (req, res) => {
   }
 };
 
-
-
-/* export const getProductByIdInCart = async (req, res) => {
-  const cart = await CartModel.findById(req.query.cartid);
-  if (!cart) {
-    return res.status(404).json({ message: 'Cart not found' });
-  }
-
-  const productInCart = cart.products.find(product => product.id === req.query.prodid);
-  if (!productInCart) {
-    return res.status(404).json({ message: 'Product not found in cart' });
-  }
-
-  const product = await ProductModel.findById(productInCart.id);
-  if (!product) {
-    return res.status(404).json({ message: 'Product not found in products collection' });
-  }
-
-  res.status(200).json(product);
-} */
+export const deleteProducts = async (req, res) => {
+  const cart = await CartModel.findById(req.body.cartid);
+  cart.products = [""]
+  console.log(cart)
+  await cart.save();
+  res.status(200).json({message: 'Products deleted'});
+}

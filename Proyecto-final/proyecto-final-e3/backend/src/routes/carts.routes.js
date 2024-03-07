@@ -1,15 +1,13 @@
 import { Router } from 'express';
 const router = Router();
+import { verifyToken, isAuthenticated, isAdmin } from '../middleware/auth.middleware.js';
 
 import * as cartController from '../controllers/carts.controller.js'
 
-router.get('/', cartController.getCarts)
-router.get('/cart', cartController.getCartById)
-router.get('/productsincart', cartController.getProductDetailsInCart)
-router.put('/add', cartController.addProductToCart);
-
-/*router.post('/', cartController.addCart)
- router.put('/:cartid', cartController.updateCart)
-router.delete('/:cartid', cartController.deleteCart) */
+router.get('/', [verifyToken, isAuthenticated], cartController.getCarts)
+router.get('/cart', [verifyToken, isAuthenticated], cartController.getCartById)
+router.get('/productsincart', [verifyToken, isAuthenticated], cartController.getProductDetailsInCart)
+router.put('/add', [ verifyToken, isAdmin ], cartController.addProductToCart)
+router.delete('/delcart', [verifyToken, isAuthenticated], cartController.deleteProducts)
 
 export default router;
